@@ -1,3 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+using Design.Controllers;
+
+UserController userController = new UserController();
+Console.WriteLine($"Fetch All Users. {userController.GetAllUsers().Count}");
 
