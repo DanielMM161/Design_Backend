@@ -5,10 +5,9 @@ namespace Design.Services.Interfaces
   public interface IUserRepository
   {
     public List<User> GetAllUsers();
-    public User? GetUser(string email);    
-    public List<User> InsertUser(User newUser);
+    public User? GetUser(string email, string password);    
     public bool CreateUser(User newUser);
-    public bool UpdateUser(int id, string email);
-    public bool DeleteUser(int id);
+    public bool UpdateUser(User user);
+    public bool DeleteUser(User user);
   }
 }

@@ -30,7 +30,7 @@ namespace Design.DataBase
         File.WriteAllText(FilePath(path), jsonData);
       } catch(Exception e)
       {
-        Console.WriteLine($"Exception WriteJsonData in {path}", e.Source);   
+        Console.WriteLine($"Exception WriteJsonData in {path}: {e.Message}", e.Source);   
         return false;
       }
       return true;
