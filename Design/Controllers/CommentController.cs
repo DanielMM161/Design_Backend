@@ -13,9 +13,9 @@ namespace Design.Controllers
 
     public CommentController()
     {
-      _commentRepository = new CommentRepository();
-      _userRepository = new UserRepository();
-      _toDoRepository = new ToDoRepository();
+      _commentRepository = CommentRepository.GetInstance();
+      _userRepository = UserRepository.GetInstance();
+      _toDoRepository = ToDoRepository.GetInstance();
     }
 
     public Response<Comment> CreateComment(string description, int userId, int toDoId)
@@ -26,7 +26,7 @@ namespace Design.Controllers
       }
 
       List<User> allUsers = _userRepository.GetAllUsers();
-      User? user = allUsers.Find(item => item.id == userId);
+      User? user = allUsers.Find(item => item.Id == userId);
       if(user == null)
       {
         return new Response<Comment>(null, "The User Not Exist, All comment must have a User asociated", Response.Status.error); 
@@ -72,7 +72,7 @@ namespace Design.Controllers
 
     public Response<bool> DeleteComment(int commentId)
     {
-      Comment comment = _commentRepository.GetCommentById(commentId);
+      Comment? comment = _commentRepository.GetCommentById(commentId);
       if(comment == null)
       {
         return new Response<bool>(false, "Comment No Exist Check Id", Response.Status.error); 
@@ -80,7 +80,7 @@ namespace Design.Controllers
 
       if(_commentRepository.DeleteComment(comment))
       {
-        return new Response<bool>(true, "Comment Deleted Successfully", Response.Status.error); 
+        return new Response<bool>(true, "Comment Deleted Successfully", Response.Status.success); 
       }
 
       return new Response<bool>(false, "Error Deleting Comment", Response.Status.error); 

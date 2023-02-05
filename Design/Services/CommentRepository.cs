@@ -6,7 +6,19 @@ namespace Design.Services
 {
   public class CommentRepository : ICommentRepository
   {
+    private static CommentRepository _instance;
     private List<Comment> _allComments = DataBaseHelper.GetData<List<Comment>>("comments");
+
+    private CommentRepository() {}
+
+    public static CommentRepository GetInstance()
+    {
+      if(_instance == null)
+      {
+        _instance = new CommentRepository();
+      }
+      return _instance;
+    }
 
     public List<Comment> GetAllComments()
     {
@@ -47,9 +59,9 @@ namespace Design.Services
     }
 
     public bool DeleteComment(Comment comment)
-    {
+    {      
       if(_allComments.Remove(comment))
-      {
+      {        
         return WriteDataBase();
       }
       return false;

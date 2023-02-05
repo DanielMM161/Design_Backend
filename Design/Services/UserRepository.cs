@@ -6,7 +6,19 @@ namespace Design.Services
 {
   public class UserRepository : IUserRepository
   {
+    private static UserRepository _instance;
     private List<User> _allUsers = DataBaseHelper.GetData<List<User>>("users");
+
+    private UserRepository() {}
+
+    public static UserRepository GetInstance()
+    {
+      if(_instance == null)
+      {
+        _instance = new UserRepository();
+      }
+      return _instance;
+    }
 
     public List<User> GetAllUsers()
     {
@@ -15,16 +27,17 @@ namespace Design.Services
 
     public User? GetUser(string email, string password)
     {
-      List<User> findUser = _allUsers.FindAll(user => user.Email.Equals(email) && user.Password.Equals(password));
-      if(findUser.Count > 0) {
-        return findUser[0];
-      }
-      return null;
+      return _allUsers.Find(user => user.Email.Equals(email) && user.Password.Equals(password));
+    }
+
+    public User? GetUserById(int userId)
+    {
+      return _allUsers.Find(user => user.Id == userId);
     }
 
     public bool CreateUser(User newUser)
     {
-      newUser.id = _allUsers.Count();
+      newUser.Id = _allUsers.Count();
       _allUsers.Add(newUser);
       return WriteDataBase();
     }

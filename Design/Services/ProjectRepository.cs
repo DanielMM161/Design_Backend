@@ -6,11 +6,28 @@ namespace Design.Services
 {
   public class ProjectRepository : IProjectRepository
   {
+    private static ProjectRepository _instance;
     private List<Project> _allProjects = DataBaseHelper.GetData<List<Project>>("projects");
+
+    private ProjectRepository() {}
+
+    public static ProjectRepository GetInstance()
+    {
+      if(_instance == null)
+      {
+        _instance = new ProjectRepository();
+      }
+      return _instance;
+    }
+
+    public List<Project> GetAllProjects()
+    {
+      return _allProjects;
+    }
 
     public List<Project> GetAllProjectsByUser(int userId)
     {
-      return _allProjects.Where(project => project.Users.Any(user => user.id == userId)).ToList();      
+      return _allProjects.Where(project => project.UsersId.Any(id => id == userId)).ToList();      
     }
 
     public Project? GetProjectById(int projectId)

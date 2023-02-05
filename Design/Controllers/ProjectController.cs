@@ -7,56 +7,86 @@ namespace Design.Controllers
 {
   public class ProjectController
   {
-    private ProjectRepository _projectRepository;
+    private ProjectRepository _projectRepository;    
 
     public ProjectController()
     {
-      _projectRepository = new ProjectRepository();
+      _projectRepository = ProjectRepository.GetInstance();
     }
     
-    public Response<Project> createProject(Project newProject)
+    /** Post */
+    public Response<Project> CreateProject(string projectName, int userId)
     {
-      if(Helper.CheckEmptyFields(newProject.Name) || newProject is null || newProject.CreatedBy is null) {
-        return new Response<Project>(null, "error", Response.Status.error); 
+      List<Project> allProjects = _projectRepository.GetAllProjects();
+      if(allProjects.Any(item => item.Name.Equals(projectName)))
+      {
+        return new Response<Project>(null, "ProjectName Already Exist", Response.Status.error); 
       }
 
+      if(Helper.CheckEmptyFields(projectName)) {
+        return new Response<Project>(null, "ProjectName Can Not Be Empty", Response.Status.error); 
+      }
+
+      Project newProject = new Project(projectName);      
+      newProject.UsersId.Add(userId);
       if(_projectRepository.CreateProject(newProject))
       {
-        return new Response<Project>(newProject, "success", Response.Status.success); 
+        return new Response<Project>(newProject, "Project Created Successfully", Response.Status.success); 
       }
 
-      return new Response<Project>(null, "error", Response.Status.error); 
+      return new Response<Project>(null, "Error Creating Project", Response.Status.error); 
     }
 
+    /** Get */
     public Response<List<Project>> FetchAllProjectsByUser(int userId)    
     {
       List<Project> projectsByUser = _projectRepository.GetAllProjectsByUser(userId);
       if(projectsByUser.Any())
       {
-        return new Response<List<Project>>(projectsByUser, "success", Response.Status.success);
+        return new Response<List<Project>>(projectsByUser, "Success", Response.Status.success);
       }
-      return new Response<List<Project>>(null, "error", Response.Status.error);
+
+      return new Response<List<Project>>(null, "Error Fetching Project By User", Response.Status.error);
     }
     
+    /** Get */
     public Response<Project> FetchProjectById(int projectId)
     {
       Project? project = _projectRepository.GetProjectById(projectId);
       if(project != null)
       {
-        return new Response<Project>(project, "success", Response.Status.success);
+        return new Response<Project>(project, "Success", Response.Status.success);
       }
 
-      return new Response<Project>(null, "error", Response.Status.error);
+      return new Response<Project>(null, "Error Fetching Project By Id", Response.Status.error);
     }
 
+    /** Put */
     public Response<Project> UpdateProject(Project project)
     {
       if(_projectRepository.UpdateProject(project))
       {
-        return new Response<Project>(project, "success", Response.Status.success);
+        return new Response<Project>(project, "Project Updated Successfully", Response.Status.success);
       }
 
-      return new Response<Project>(null, "error", Response.Status.error);
+      return new Response<Project>(null, "Error Updating Project", Response.Status.error);
+    }
+
+    /** Delete*/
+    public Response<bool> DeleteProject(int projectId)
+    {
+      Project? project = _projectRepository.GetProjectById(projectId);
+      if(project == null)
+      {
+        return new Response<bool>(false, "Project Not Exist", Response.Status.error);
+      }
+
+      if(_projectRepository.DeleteProject(project))
+      {
+        return new Response<bool>(false, "Project Deleted Successfully", Response.Status.success);
+      }
+
+      return new Response<bool>(false, "Error Deleting Project", Response.Status.error);
     }
   }
 }

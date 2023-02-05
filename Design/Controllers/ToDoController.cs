@@ -8,10 +8,15 @@ namespace Design.Controllers
   public class ToDoController
   {
     private ToDoRepository _toDoRepository;
+    private UserRepository _userRepository;    
+    private CommentRepository _commentRepository;
 
     public ToDoController()
     {
-      _toDoRepository = new ToDoRepository();
+      _toDoRepository = ToDoRepository.GetInstance();
+      _userRepository = UserRepository.GetInstance();      
+      _commentRepository = CommentRepository.GetInstance();
+
     }
 
     public Response<List<ToDo>> FetchToDoByProject(int projectId)
@@ -27,9 +32,18 @@ namespace Design.Controllers
         return new Response<ToDo>(null, "Not empty fields", Response.Status.error);
       }
 
-      if(!_toDoRepository.GetAllToDo().Any(item => item.Title.Trim().ToLower().Equals(title.Trim().ToLower())))
+      bool exist = _toDoRepository.GetAllToDo().Any(item => {
+        bool exisTitle = item.Title.Trim().ToLower().Equals(title.Trim().ToLower());
+        if(exisTitle && item.ProjectId == projectId)
+        {
+          return true;
+        }
+        return false;
+      });
+      
+      if(exist)
       {
-        return new Response<ToDo>(null, "ToDo Already Created", Response.Status.error);
+        return new Response<ToDo>(null, "ToDo Already Exist", Response.Status.error);
       }
 
       ToDo newToDo = new ToDo(projectId, title, description);
@@ -38,7 +52,38 @@ namespace Design.Controllers
         return new Response<ToDo>(newToDo, "ToDo Created Successfully", Response.Status.success);
       }
 
-      return new Response<ToDo>(null, "Error Inserting Creating ToDo", Response.Status.error);
+      return new Response<ToDo>(null, "Error Creating ToDo", Response.Status.error);
+    }
+
+    public Response<bool> AssignToDo(int userId, int todoId)
+    {  
+      User? user = _userRepository.GetUserById(userId);      
+      if(user == null)
+      {
+        return new Response<bool>(false, "User Not Exist", Response.Status.error);
+      }
+
+      ToDo? todo = _toDoRepository.GetToDoById(todoId);      
+      if(todo == null)
+      {
+        return new Response<bool>(false, "ToDo Not Exist", Response.Status.error);
+      }
+
+      foreach(var usersId in todo.UsersId)
+      {        
+        if(usersId == userId)
+        {
+          return new Response<bool>(false, "User Already Assigned", Response.Status.error);
+        }
+      }
+
+      todo.UsersId.Add(userId);
+      if(_toDoRepository.UpdateToDo(todo))
+      {
+        return new Response<bool>(true, "User Assigned Successfully", Response.Status.success);
+      }
+
+      return new Response<bool>(false, "Error Assigning User", Response.Status.error);
     }
 
     public Response<bool> DeleteToDo(int todoId)
@@ -51,6 +96,12 @@ namespace Design.Controllers
 
       if(_toDoRepository.DeleteTodo(toDo))
       {
+        // Reply the changes in comments Entity
+        List<Comment> allComments = _commentRepository.GetCommentByToDo(todoId);
+        foreach(var coment in allComments)
+        {
+          _commentRepository.DeleteComment(coment);
+        }
         return new Response<bool>(true, "ToDo Deleted Successfully", Response.Status.success);
       }
 

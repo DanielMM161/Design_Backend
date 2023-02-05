@@ -6,7 +6,19 @@ namespace Design.Services
 {
   public class ToDoRepository : IToDoRepository
   {
+    private static ToDoRepository _instance;
     private List<ToDo> _allToDo = DataBaseHelper.GetData<List<ToDo>>("todos");
+
+    private ToDoRepository() {}
+
+    public static ToDoRepository GetInstance()
+    {
+      if(_instance == null)
+      {
+        _instance = new ToDoRepository();
+      }
+      return _instance;
+    }
 
     public List<ToDo> GetAllToDo()
     {

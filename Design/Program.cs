@@ -4,20 +4,78 @@ using Design.Models;
 using Design.Response;
 
 UserController userController = new UserController();
-string name = "Daniel Moteno";
+ProjectController projectController = new ProjectController();
+ToDoController toDoController = new ToDoController();
+CommentController commentController = new CommentController();
+
+Project? projectCreated = null;
+ToDo? toDoCreated = null;
+Comment? commentCreated = null;
+
+string name = "Daniel Moreno";
 string email = "daniel@test.com";
 string password = "123456";
-Console.WriteLine("----------- Sign Up User -----------");
-Console.WriteLine($"Name: {name}, Email: {email}, Password: {password}");
 
-Response<User?> user = userController.SignUp(name, email, password);
-if(user.Data == null)
+Response<User> userResponse = userController.SignUp(name, email, password);
+ShowMessage(userResponse, "Sign Up User");
+
+Response<User> loginUserResponse = userController.Login(email, password);
+ShowMessage(loginUserResponse, "Login");
+
+// If User it's logged you can do things
+if(loginUserResponse.Data != null)
 {
-  Console.WriteLine($"----------- Status: {user.Status}, Message: {user.Message} -----------");
-} else {
-  Console.WriteLine($"----------- Status: {user.Status}, Message: {user.Message} -----------");
-  Console.WriteLine($"{user.Data.Name} SignUp Correctly");
+  User loginUser = loginUserResponse.Data;  
+  Console.WriteLine($"Login User: {loginUser.Name}, Email: {loginUser.Email}");
+  Console.WriteLine("");
+    
+  Response<Project> projectResponse = projectController.CreateProject("Project Test", loginUser.Id);
+  projectCreated = projectResponse.Data;
+  ShowMessage(projectResponse, " Create Project");
+    
+  Response<ToDo> toDoResponse = toDoController.CreateToDo(projectCreated.Id, "Title Test", "Description Test");
+  toDoCreated = toDoResponse.Data;
+  ShowMessage(toDoResponse, "Create ToDo");
+  
+  toDoResponse = toDoController.CreateToDo(projectCreated.Id, "Title Test 2", "Description Test 2");
+  toDoCreated = toDoResponse.Data;
+  ShowMessage(toDoResponse, "Create ToDo Same Project");
+  
+  toDoResponse = toDoController.CreateToDo(projectCreated.Id, "Title Test 2", "Description Test 2");
+  ShowMessage(toDoResponse, "Create ToDo Same Project and Same Title");
+  
+  Response<bool> assignToDo = toDoController.AssignToDo(loginUser.Id, toDoCreated.Id);
+  ShowMessage(assignToDo, "Assign ToDo");
+  
+  assignToDo = toDoController.AssignToDo(loginUser.Id, toDoCreated.Id);
+  ShowMessage(assignToDo, "Assign ToDo Same User");
+  
+  toDoCreated.Status = Design.Models.Status.inProgress;
+  Response<ToDo> todoUpdated = toDoController.UpdateTodo(toDoCreated);
+  ShowMessage(todoUpdated, "Update Todo Status");
+  
+  Response<Comment> commentResponse = commentController.CreateComment("Comment Description", loginUser.Id, toDoCreated.Id);
+  commentCreated = commentResponse.Data;
+  ShowMessage(commentResponse, "Create Comment");
+
+  commentResponse = commentController.UpdateComment("Comment Description Updated", commentCreated.Id);
+  ShowMessage(commentResponse, "Update Comment");
+
+  Response<bool> commentDeleteResponse = commentController.DeleteComment(commentCreated.Id);
+  ShowMessage(commentDeleteResponse, "Delete Comment");
 }
+
+void ShowMessage<T>(Response<T> response, string message)
+{
+  Console.WriteLine($"----------- {message} -----------");
+  Console.WriteLine($"----------- Status: {response.Status}, Message: {response.Message} -----------");
+  Console.WriteLine("");
+}
+
+
+
+
+
 
 
 

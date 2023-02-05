@@ -3,18 +3,15 @@ namespace Design.Models
   public class Project : IEquatable<Project>
   {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public User CreatedBy { get; set; }
-    public List<User> Users { get; set; }
-    public DateOnly Created { get; set; }
-    public List<ToDo> Tasks { get; set; }
+    public string Name { get; set; }    
+    public List<int> UsersId { get; set; }
+    public string Created { get; set; }
 
-    public Project(int id, string name, User createdBy)
-    {
-      Id = id;
-      Name = name;
-      CreatedBy = createdBy;      
-      Created = new DateOnly();
+    public Project(string name)
+    {      
+      Name = name;      
+      Created = DateTime.Now.ToString();
+      UsersId = new List<int>();      
     }
 
     public override bool Equals(object obj)
