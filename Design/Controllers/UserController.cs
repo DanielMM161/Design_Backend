@@ -13,10 +13,12 @@ namespace Design.Controllers
     {
       _userRepository = new UserRepository();
     }
+
     public List<User> GetAllUsers()
     {
       return _userRepository.GetAllUsers();
     }
+    
     public Response<User> SignUp(string name, string email, string password)
     {
       if(Helper.CheckEmptyFields(name, email, password)) {

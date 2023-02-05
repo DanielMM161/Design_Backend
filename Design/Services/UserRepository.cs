@@ -6,7 +6,8 @@ namespace Design.Services
 {
   public class UserRepository : IUserRepository
   {
-    private List<User> _allUsers = DataBaseHelper.GetData<List<User>>("user");
+    private List<User> _allUsers = DataBaseHelper.GetData<List<User>>("users");
+
     public List<User> GetAllUsers()
     {
       return _allUsers;
@@ -20,23 +21,30 @@ namespace Design.Services
       }
       return null;
     }
+
     public bool CreateUser(User newUser)
     {
       newUser.id = _allUsers.Count();
       _allUsers.Add(newUser);
-      return DataBaseHelper.WriteJsonData<List<User>>(_allUsers, "user");      
+      return WriteDataBase();
     }
+
     public bool UpdateUser(User user)
     {
       throw new NotImplementedException();
     }
+    
     public bool DeleteUser(User user)
     {
       if(_allUsers.Remove(user)) {
-        return DataBaseHelper.WriteJsonData<List<User>>(_allUsers, "user");
+        return WriteDataBase();
       }
-      
       return false;
+    }
+
+    private bool WriteDataBase()
+    {
+      return DataBaseHelper.WriteJsonData<List<User>>(_allUsers, "users");
     }
   }
 }

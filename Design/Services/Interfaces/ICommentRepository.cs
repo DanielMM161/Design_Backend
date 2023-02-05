@@ -4,9 +4,16 @@ namespace Design.Services.Interfaces
 {
   public interface ICommentRepository
   {
-    public List<Comment> GetCommentByToDo(int toDoId);    
+    public List<Comment> GetAllComments();  
+
+    public List<Comment> GetCommentByToDo(int toDoId);  
+
+    public List<Comment> GetCommentByUser(int userId);
+
     public bool CreateComment(Comment newComment);
-    public bool UpdateComment(Comment commentId);
-    public bool DeleteComment(int commentId);
+
+    public bool UpdateComment(Comment comment);
+
+    public bool DeleteComment(Comment comment);
   }
 }

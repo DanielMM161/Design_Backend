@@ -8,6 +8,12 @@ namespace Design.Controllers
   public class ProjectController
   {
     private ProjectRepository _projectRepository;
+
+    public ProjectController()
+    {
+      _projectRepository = new ProjectRepository();
+    }
+    
     public Response<Project> createProject(Project newProject)
     {
       if(Helper.CheckEmptyFields(newProject.Name) || newProject is null || newProject.CreatedBy is null) {
@@ -21,6 +27,7 @@ namespace Design.Controllers
 
       return new Response<Project>(null, "error", Response.Status.error); 
     }
+
     public Response<List<Project>> FetchAllProjectsByUser(int userId)    
     {
       List<Project> projectsByUser = _projectRepository.GetAllProjectsByUser(userId);
@@ -30,6 +37,7 @@ namespace Design.Controllers
       }
       return new Response<List<Project>>(null, "error", Response.Status.error);
     }
+    
     public Response<Project> FetchProjectById(int projectId)
     {
       Project? project = _projectRepository.GetProjectById(projectId);
@@ -40,6 +48,7 @@ namespace Design.Controllers
 
       return new Response<Project>(null, "error", Response.Status.error);
     }
+
     public Response<Project> UpdateProject(Project project)
     {
       if(_projectRepository.UpdateProject(project))

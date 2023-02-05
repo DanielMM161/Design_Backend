@@ -10,23 +10,22 @@ namespace Design.Models
   public class ToDo
   {
     public int Id { get; set; }
+    public int ProjectId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
     public DateOnly DueDate { get; set; }
-    public DateOnly Created { get; set; }
+    public string Created { get; set; }
     public Status Status { get; set; }
     public List<User> Users { get; set; }
     public List<Comment> Comments { get; set; }
 
-    public ToDo(int id, string title, string description, DateOnly dueDate, List<User> users)
-    {
-      Id = id;
+    public ToDo(int projectId, string title, string description)
+    {      
+      ProjectId = projectId;
       Title = title;
       Description = description;
-      Created = new DateOnly();
+      Created = DateTime.Now.ToString();
       Status = Status.open;
-      DueDate = dueDate;
-      Users = users;
     }
   }
 }

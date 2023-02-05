@@ -15,13 +15,7 @@ namespace Design.DataBase
       string jsonData = File.ReadAllText(FilePath(path));
       return JsonSerializer.Deserialize<T>(jsonData);
     }
-
-    public static List<T> GetListData<T>(string path)
-    {
-      string jsonData = File.ReadAllText(path);
-      return JsonSerializer.Deserialize<List<T>>(jsonData);
-    }
-
+    
     public static bool WriteJsonData<T>(T value, string path)
     {
       try

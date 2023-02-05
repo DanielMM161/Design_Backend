@@ -4,17 +4,16 @@ namespace Design.Models
   {
     public int Id { get; set; }
     public string Description { get; set; }
-    public DateOnly Created { get; set; }
-    public List<User> Users { get; set; }
-    public ToDo Task { get; set; }
+    public string Created { get; set; }
+    public int UserId { get; set; }
+    public int ToDoId { get; set; }
 
-    public Comment(int id, string description, List<User> users, ToDo task)
-    {
-      Id = id;
+    public Comment(string description, int userId, int toDoiId)
+    {      
       Description = description;
-      Created = new DateOnly();
-      Users = users;
-      Task = task;
+      Created = DateTime.Now.ToString();
+      UserId = userId;
+      ToDoId = toDoiId;
     }
   }
 }

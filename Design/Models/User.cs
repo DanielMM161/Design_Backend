@@ -2,7 +2,7 @@ namespace Design.Models
 {
   public class User 
   {
-    public int id { get; set;}
+     public int id { get; set;}
     public string Name { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
@@ -12,7 +12,7 @@ namespace Design.Models
 
     public User(string name, string email, string password) 
     {
-      Created = new DateOnly().ToString();
+      Created = DateTime.Now.ToString();
       Name = name;
       Email = email;
       Password = password;
