@@ -13,6 +13,11 @@ namespace Design.Services
       return _allComments;
     }
 
+    public Comment? GetCommentById(int commentId)
+    {
+      return _allComments.Find(item => item.Id == commentId);
+    }
+
     public List<Comment> GetCommentByToDo(int toDoId)
     {
       return _allComments.Where(item => item.ToDoId == toDoId).ToList();

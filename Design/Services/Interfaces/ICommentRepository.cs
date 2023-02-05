@@ -6,7 +6,9 @@ namespace Design.Services.Interfaces
   {
     public List<Comment> GetAllComments();  
 
-    public List<Comment> GetCommentByToDo(int toDoId);  
+    public Comment GetCommentById(int commentId);
+
+    public List<Comment> GetCommentByToDo(int toDoId);
 
     public List<Comment> GetCommentByUser(int userId);
 
