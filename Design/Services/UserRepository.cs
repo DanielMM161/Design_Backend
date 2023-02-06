@@ -36,8 +36,7 @@ namespace Design.Services
     }
 
     public bool CreateUser(User newUser)
-    {
-      newUser.Id = _allUsers.Count();
+    {      
       _allUsers.Add(newUser);
       return WriteDataBase();
     }

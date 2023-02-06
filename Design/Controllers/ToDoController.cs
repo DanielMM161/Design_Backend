@@ -46,7 +46,8 @@ namespace Design.Controllers
         return new Response<ToDo>(null, "ToDo Already Exist", Response.Status.error);
       }
 
-      ToDo newToDo = new ToDo(projectId, title, description);
+      int id = _toDoRepository.GetAllToDo().Count();
+      ToDo newToDo = new ToDo(id, projectId, title, description);
       if(_toDoRepository.CreateTodo(newToDo))
       {
         return new Response<ToDo>(newToDo, "ToDo Created Successfully", Response.Status.success);
@@ -96,7 +97,7 @@ namespace Design.Controllers
 
       if(_toDoRepository.DeleteTodo(toDo))
       {
-        // Deleting Cascade
+        // Deleting in Cascade
         List<Comment> allComments = _commentRepository.GetCommentByToDo(todoId);
         foreach(var coment in allComments)
         {

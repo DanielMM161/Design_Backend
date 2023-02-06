@@ -9,17 +9,18 @@ namespace Design.Models
   }
   public class ToDo
   {
-    public int Id { get; set; }
-    public int ProjectId { get; set; }
+    public int Id { get; }
+    public int ProjectId { get; }
     public string Title { get; set; }
     public string Description { get; set; }
     public string DueDate { get; set; }
-    public string Created { get; set; }
+    public string Created { get; }
     public Status Status { get; set; }
     public List<int> UsersId { get; set; }    
 
-    public ToDo(int projectId, string title, string description)
-    {      
+    public ToDo(int id, int projectId, string title, string description)
+    {
+      Id = id;
       ProjectId = projectId;
       Title = title;
       Description = description;

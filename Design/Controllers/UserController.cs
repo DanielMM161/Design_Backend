@@ -32,7 +32,8 @@ namespace Design.Controllers
         return new Response<User>(null, "Empty Fields", Response.Status.error); 
       }
 
-      User newUser = new User(name, email, password, false); 
+      int id = _userRepository.GetAllUsers().Count();
+      User newUser = new User(id, name, email, password, false); 
       if(_userRepository.CreateUser(newUser)) {
         return new Response<User>(newUser, "SignUp Successfully", Design.Response.Status.success);
       }
@@ -67,7 +68,7 @@ namespace Design.Controllers
 
       if(_userRepository.DeleteUser(user))
       {
-        // Deleting Cascade
+        // Deleting in Cascade
         DeleteUserIdProjects(userId);
         DeleteUserIdToDos(userId);
         DeleteUserComments(userId);

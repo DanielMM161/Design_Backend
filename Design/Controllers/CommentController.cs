@@ -39,7 +39,8 @@ namespace Design.Controllers
         return new Response<Comment>(null, "The ToDo Not Exist, All comment must have a ToDo asociated", Response.Status.error); 
       }
 
-      Comment newComment = new Comment(description, userId, toDoId);
+      int id = _commentRepository.GetAllComments().Count();
+      Comment newComment = new Comment(id, description, userId, toDoId);
       if(_commentRepository.CreateComment(newComment))
       {
         return new Response<Comment>(newComment, "Comment Created Successfully", Response.Status.success); 

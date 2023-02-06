@@ -42,8 +42,7 @@ namespace Design.Services
     }
 
     public bool CreateProject(Project newProject)
-    {
-      newProject.Id = _allProjects.Count();
+    {      
       _allProjects.Add(newProject);
       return WriteDataBase();
     }

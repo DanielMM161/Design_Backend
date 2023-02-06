@@ -2,13 +2,14 @@ namespace Design.Models
 {
   public class Project : IEquatable<Project>
   {
-    public int Id { get; set; }
+    public int Id { get; }
     public string Name { get; set; }    
     public List<int> UsersId { get; set; }
-    public string Created { get; set; }
+    public string Created { get; }
 
-    public Project(string name)
-    {      
+    public Project(int id, string name)
+    {
+      Id = Id;
       Name = name;      
       Created = DateTime.Now.ToString();
       UsersId = new List<int>();      

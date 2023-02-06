@@ -4,7 +4,6 @@ namespace Design.DataBase
 {
   public static class DataBaseHelper
   {
-
     private static string FilePath(string path)
     {      
       return $"{Environment.CurrentDirectory}/FakeData/{path}.json";

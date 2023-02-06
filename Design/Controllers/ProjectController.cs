@@ -31,7 +31,8 @@ namespace Design.Controllers
         return new Response<Project>(null, "ProjectName Can Not Be Empty", Response.Status.error); 
       }
 
-      Project newProject = new Project(projectName);      
+      int id = _projectRepository.GetAllProjects().Count();
+      Project newProject = new Project(id, projectName);      
       newProject.UsersId.Add(userId);
       if(_projectRepository.CreateProject(newProject))
       {

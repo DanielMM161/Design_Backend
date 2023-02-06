@@ -2,14 +2,15 @@ namespace Design.Models
 {
   public class Comment
   {
-    public int Id { get; set; }
+    public int Id { get; }
     public string Description { get; set; }
-    public string Created { get; set; }
-    public int UserId { get; set; }
-    public int ToDoId { get; set; }
+    public string Created { get; }
+    public int UserId { get; }
+    public int ToDoId { get; }
 
-    public Comment(string description, int userId, int toDoiId)
-    {      
+    public Comment(int id, string description, int userId, int toDoiId)
+    {
+      Id = id;
       Description = description;
       Created = DateTime.Now.ToString();
       UserId = userId;

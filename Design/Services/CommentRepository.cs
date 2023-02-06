@@ -41,8 +41,7 @@ namespace Design.Services
     }
 
     public bool CreateComment(Comment newComment)
-    {
-      newComment.Id = _allComments.Count();
+    {      
       _allComments.Add(newComment);
       return WriteDataBase();
     }

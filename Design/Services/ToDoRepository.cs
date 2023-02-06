@@ -47,8 +47,7 @@ namespace Design.Services
     }
 
     public bool CreateTodo(ToDo newToDo)
-    {
-      newToDo.Id = _allToDo.Count();
+    {      
       _allToDo.Add(newToDo);
       return WriteDataBase();
     }
