@@ -96,7 +96,7 @@ namespace Design.Controllers
 
       if(_toDoRepository.DeleteTodo(toDo))
       {
-        // Reply the changes in comments Entity
+        // Deleting Cascade
         List<Comment> allComments = _commentRepository.GetCommentByToDo(todoId);
         foreach(var coment in allComments)
         {

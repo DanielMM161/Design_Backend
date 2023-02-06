@@ -38,7 +38,12 @@ namespace Design.Services
     
     public List<ToDo> GetTodoByProject(int projectId)
     {
-      return _allToDo.Where(task => task.ProjectId == projectId).ToList();
+      return _allToDo.Where(toDo => toDo.ProjectId == projectId).ToList();
+    }
+
+    public List<ToDo> GetTodoByUser(int userId)
+    {
+      return _allToDo.Where(toDo => toDo.UsersId.Any(value => value == userId)).ToList();
     }
 
     public bool CreateTodo(ToDo newToDo)

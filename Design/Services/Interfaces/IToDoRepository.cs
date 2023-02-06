@@ -6,6 +6,7 @@ namespace Design.Services.Interfaces
   { 
     public List<ToDo> GetAllToDo();   
     public List<ToDo> GetTodoByProject(int projectId);
+    public List<ToDo> GetTodoByUser(int userId);
     public ToDo GetToDoById(int todoId);
     public bool CreateTodo(ToDo newToDo);
     public bool UpdateToDo(ToDo toDo);

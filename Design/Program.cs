@@ -61,8 +61,21 @@ if(loginUserResponse.Data != null)
   commentResponse = commentController.UpdateComment("Comment Description Updated", commentCreated.Id);
   ShowMessage(commentResponse, "Update Comment");
 
-  Response<bool> commentDeleteResponse = commentController.DeleteComment(commentCreated.Id);
-  ShowMessage(commentDeleteResponse, "Delete Comment");
+  // Delete Comment
+  // Response<bool> commentDeleteResponse = commentController.DeleteComment(commentCreated.Id);
+  // ShowMessage(commentDeleteResponse, "Delete Comment");
+
+  // Delete ToDo
+  // Response<bool> toDoDeleteResponse = toDoController.DeleteToDo(toDoCreated.Id);
+  // ShowMessage(toDoDeleteResponse, "Delete ToDo");
+
+  // Delete User
+  // Response<bool> userDeleteResponse = userController.DeleteUser(loginUser.Id);
+  // ShowMessage(userDeleteResponse, "Delete User");
+
+  // Delete Project
+  // Response<bool> projectDeleteResponse = projectController.DeleteProject(projectCreated.Id);
+  // ShowMessage(projectDeleteResponse, "Delete Project");
 }
 
 void ShowMessage<T>(Response<T> response, string message)

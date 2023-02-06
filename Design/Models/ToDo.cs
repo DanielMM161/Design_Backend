@@ -16,8 +16,7 @@ namespace Design.Models
     public string DueDate { get; set; }
     public string Created { get; set; }
     public Status Status { get; set; }
-    public List<int> UsersId { get; set; }
-    public List<int> CommentsId { get; set; }
+    public List<int> UsersId { get; set; }    
 
     public ToDo(int projectId, string title, string description)
     {      
@@ -26,8 +25,7 @@ namespace Design.Models
       Description = description;
       Created = DateTime.Now.ToString();
       Status = Status.open;
-      UsersId = new List<int>();
-      CommentsId = new List<int>();
+      UsersId = new List<int>();      
     }
   }
 }

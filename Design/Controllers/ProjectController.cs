@@ -7,11 +7,15 @@ namespace Design.Controllers
 {
   public class ProjectController
   {
-    private ProjectRepository _projectRepository;    
+    private ProjectRepository _projectRepository;
+    private ToDoRepository _toDoRepository;
+    private CommentRepository _commentRepository;
 
     public ProjectController()
     {
       _projectRepository = ProjectRepository.GetInstance();
+      _toDoRepository = ToDoRepository.GetInstance();
+      _commentRepository = CommentRepository.GetInstance();
     }
     
     /** Post */
@@ -72,7 +76,7 @@ namespace Design.Controllers
       return new Response<Project>(null, "Error Updating Project", Response.Status.error);
     }
 
-    /** Delete*/
+    /** Delete */
     public Response<bool> DeleteProject(int projectId)
     {
       Project? project = _projectRepository.GetProjectById(projectId);
@@ -83,10 +87,31 @@ namespace Design.Controllers
 
       if(_projectRepository.DeleteProject(project))
       {
+        // Deleting in Cascade
+        DeleteProjectTaskComment(projectId);
         return new Response<bool>(false, "Project Deleted Successfully", Response.Status.success);
       }
 
       return new Response<bool>(false, "Error Deleting Project", Response.Status.error);
+    }
+
+    private void DeleteProjectTaskComment(int projectId)
+    {
+      List<ToDo> projectToDos = _toDoRepository.GetTodoByProject(projectId);
+      foreach(var todo in projectToDos)
+      {
+        DeleteCommentTask(todo.Id);
+        _toDoRepository.DeleteTodo(todo);
+      }
+    }
+
+    private void DeleteCommentTask(int toDoId)
+    {
+      List<Comment> commentToDo = _commentRepository.GetCommentByToDo(toDoId);
+      foreach(var comment in commentToDo)
+      {
+        _commentRepository.DeleteComment(comment);
+      }
     }
   }
 }
